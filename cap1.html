@@ -83,6 +83,13 @@
             color: #007bff;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
             font-size: 2em;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         form input, form select, form textarea {
@@ -102,7 +109,7 @@
             outline: none;
         }
 
-        form input[type="submit"] {
+        form input[type="submit"], form button {
             background-color: #007bff;
             color: white;
             border: none;
@@ -112,7 +119,7 @@
             transition: background-color 0.3s, transform 0.3s;
         }
 
-        form input[type="submit"]:hover {
+        form input[type="submit"]:hover, form button:hover {
             background-color: #0056b3;
             transform: scale(1.05);
         }
@@ -224,6 +231,28 @@
         .fade-in {
             animation: fadeIn 1s ease-in-out;
         }
+
+        /* Payment section styles */
+        .payment-section {
+            display: none;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .payment-section input[type="text"], .payment-section input[type="number"], .payment-section input[type="submit"] {
+            margin: 10px 0;
+        }
+
+        .payment-section input[type="submit"] {
+            background-color: #28a745;
+            transition: background-color 0.3s;
+        }
+
+        .payment-section input[type="submit"]:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
@@ -270,324 +299,284 @@
                 return;
             }
 
-            if (page === 'admin' && !isAdmin) {
-                alert('Admin access only.');
-                loadPage('login');
-                return;
-            }
-
             if (page === 'home') {
                 content.innerHTML = `
-                    <h2>Home</h2>
-                    <p>Welcome to our luxurious hotel. Enjoy a world-class stay with top-tier services.Step into a World of elegance and sophistication at Spark Hotel,where we blend timeless luxury with modern ameneties to offer you an unforgettable stay.Whether you are here for business or leisure ,our hotel promises an experience defined by impeccable service,stunning accomodations,and first class amenities. </p>`;
+                    <h2>Welcome to SPARK Hotel</h2>
+                    <p>Your comfort is our priority. Explore our offerings and book your stay with us!</p>
+                    <p>Experience luxury and comfort like never before. Our hotel offers a variety of rooms and amenities tailored to meet your needs.</p>
+                    <p>Enjoy our state-of-the-art facilities, including a swimming pool, spa, fitness center, and gourmet dining options. Whether you're here for business or leisure, we have something for everyone.</p>
+                    <p>Book your stay with us today and create unforgettable memories!</p>`;
             } else if (page === 'about') {
                 content.innerHTML = `
                     <h2>About Us</h2>
-                    <p>We are a premier hotel located in the heart of the city, offering comfort, luxury, and exceptional services to our guests.</p>`;
+                    <p>Our hotel has been offering exceptional service since 1990. We are committed to providing our guests with the best hospitality experience. Our staff is dedicated to ensuring your stay is comfortable and memorable.</p>
+                    <p>SPARK Hotel is dedicated to providing exceptional service and hospitality. Established in 2005, our hotel has become a favorite destination for travelers from around the world.</p>
+                    <p>Our mission is to deliver an unparalleled guest experience through personalized service, luxurious accommodations, and a commitment to excellence. We pride ourselves on our attention to detail and our dedication to making every guest feel special.</p>
+                    <p>Our team of professionals is here to ensure your stay is comfortable and memorable. Thank you for choosing SPARK Hotel!</p>`;
             } else if (page === 'rooms') {
                 content.innerHTML = `
-                    <h2>Room Types</h2>
-                    <p>Introduction to our room types:</p>
-                    <ul>
-                        <li>Standard Room</li>
-                        <li>Deluxe Room</li>
-                        <li>Executive Suite</li>
-                        <li>Presidential Suite</li>
-                    </ul>`;
+                    <h2>Rooms</h2>
+                    <p>We offer a variety of room options to suit your needs. From luxurious suites to cozy standard rooms, each is equipped with modern amenities to ensure a comfortable stay. Check out our room options and book the one that best fits your needs.</p>
+                    <p>We offer a range of room options to suit your needs and preferences:</p>
+                        <ul>
+                            <li><strong>Standard Room:</strong> Comfortable and well-equipped with modern amenities.</li>
+                            <li><strong>Deluxe Room:</strong> Spacious with added luxury and premium features.</li>
+                            <li><strong>Suite:</strong> Elegant and expensive, perfect for a special occasion or extended stay.</li>
+                        </ul>
+                        <table>
+                            <tr><th>Room Type</th><th>Description</th><th>Price per Night</th></tr>
+                             <tr><td>Standard Room</td><td>Comfortable room with city view.</td><td>$120</td></tr>
+                            <tr><td>Deluxe Room</td><td>Luxurious room with sea view.</td><td>$200</td></tr>
+                            <tr><td>Suite</td><td>Elegant and expensive, perfect for a special occasion or extended stay.</td><td>$500</td></tr>
+                        </table>
+                        <p>Each room is designed to provide a relaxing and enjoyable stay. For more details on room rates and availability, please visit our booking page.</p>`;
             } else if (page === 'booking') {
                 content.innerHTML = `
-                    <h2>Room Booking</h2>
-                    <form onsubmit="bookRoom(event)">
+                    <h2>Book Your Stay</h2>
+                    <form onsubmit="submitBooking(event)">
+                        <label for="name">Full Name:</label>
+                        <input type="text" id="name" name="name" required>
+                        
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                        
+                        <label for="phone">Phone Number:</label>
+                        <input type="tel" id="phone" name="phone" required>
+                        
+                        <label for="checkin">Check-in Date:</label>
+                        <input type="date" id="checkin" name="checkin" required>
+                        
+                        <label for="checkout">Check-out Date:</label>
+                        <input type="date" id="checkout" name="checkout" required>
+                        
                         <label for="roomType">Room Type:</label>
-                        <select id="roomType" required>
+                        <select id="roomType" name="roomType" required>
                             <option value="Standard">Standard</option>
                             <option value="Deluxe">Deluxe</option>
-                            <option value="Executive">Executive Suite</option>
-                            <option value="Presidential">Presidential Suite</option>
+                            <option value="suite">Suite</option>
                         </select>
-                        <label for="checkin">Check-In Date:</label>
-                        <input type="date" id="checkin" required>
-                        <label for="checkout">Check-Out Date:</label>
-                        <input type="date" id="checkout" required>
-                        <input type="submit" value="Book Now">
-                    </form>
-                    <button onclick="loadPage('history')">View Booking History</button>`;
-            } else if (page === 'history') {
-                showBookingHistory();
+                        
+                        <div class="payment-section" id="paymentSection">
+                            <h3>Payment Details</h3>
+                            <label for="cardNumber">Card Number:</label>
+                            <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9876 5432" required>
+                            
+                            <label for="expiryDate">Expiry Date:</label>
+                            <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" required>
+                            
+                            <label for="cvv">CVV:</label>
+                            <input type="number" id="cvv" name="cvv" placeholder="123" required>
+                            
+                            <input type="submit" value="Submit Booking">
+                        </div>
+                    </form>`;
+                document.getElementById('checkin').addEventListener('change', togglePaymentSection);
+                document.getElementById('checkout').addEventListener('change', togglePaymentSection);
             } else if (page === 'contact') {
                 content.innerHTML = `
                     <h2>Contact Us</h2>
-                    <p>For inquiries, please contact us at:</p>
-                    <p>Email: sparkmanagement@hotel.com</p>
-                    <p>Phone: +1 234 567 8900</p>`;
+                    <p>Feel free to reach out to us for any inquiries or assistance. We are here to help you 24/7.</p>
+                    <p><strong>Email:</strong> contact@sparkhotel.com</p>
+                    <p><strong>Phone:</strong> +123-456-7890</p>
+                    <p><strong>Address:</strong> 123 Hotel Street, New York City, USA</p>`;
             } else if (page === 'login') {
                 content.innerHTML = `
-                    <h2>Login or Register</h2>
-                    <button onclick="showLogin()">Login</button>
-                    <button onclick="showRegister()">Register</button>
-                    <div id="authSection"></div>`;
-            } else if (page === 'profile') {
+                    <h2>Login / Register</h2>
+                    <form onsubmit="handleLogin(event)">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" name="username" required>
+                        
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" required>
+                        
+                        <input type="submit" value="Login">
+                    </form>
+                    <p>Don't have an account? <a href="#" onclick="loadPage('register')">Register here</a>.</p>`;
+            } else if (page === 'register') {
                 content.innerHTML = `
-                    <h2>Your Profile</h2>
-                    <p>Name: ${currentUser.name}</p>
-                    <p>Email: ${currentUser.email}</p>
-                    <button onclick="editProfile()">Edit Profile</button>`;
+                    <h2>Register</h2>
+                    <form onsubmit="handleRegister(event)">
+                        <label for="newUsername">Username:</label>
+                        <input type="text" id="newUsername" name="newUsername" required>
+                        
+                        <label for="newPassword">Password:</label>
+                        <input type="password" id="newPassword" name="newPassword" required>
+                        
+                        <input type="submit" value="Register">
+                    </form>`;
             } else if (page === 'admin') {
-                showAdminPanel();
+                content.innerHTML = `
+                    <h2>Admin Panel</h2>
+                    <div class="admin-section">
+                        <h3>Modify Bookings</h3>
+                        <p>Here you can view and modify bookings.</p>
+                        <!-- Modify bookings functionality -->
+                    </div>
+                    <div class="admin-section">
+                        <h3>Cancel Bookings</h3>
+                        <p>Here you can view and cancel bookings.</p>
+                        <!-- Cancel bookings functionality -->
+                    </div>`;
+            } else if (page === 'history') {
+                content.innerHTML = `
+                    <h2>Booking History</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Check-in</th>
+                                <th>Check-out</th>
+                                <th>Room Type</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${bookings.map(booking => `
+                            <tr>
+                                <td>${booking.id}</td>
+                                <td>${booking.name}</td>
+                                <td>${booking.email}</td>
+                                <td>${booking.phone}</td>
+                                <td>${booking.checkin}</td>
+                                <td>${booking.checkout}</td>
+                                <td>${booking.roomType}</td>
+                                <td>
+                                    <button onclick="modifyBooking(${booking.id})">Modify</button>
+                                    <button onclick="cancelBooking(${booking.id})">Cancel</button>
+                                </td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>`;
+            } else {
+                content.innerHTML = `<h2>Page not found</h2><p>The page you are looking for does not exist.</p>`;
+            }
+
+            // Apply fade-in effect
+            content.classList.remove('fade-in');
+            setTimeout(() => content.classList.add('fade-in'), 100);
+        }
+
+        // Function to toggle payment section visibility
+        function togglePaymentSection() {
+            let checkinDate = document.getElementById('checkin').value;
+            let checkoutDate = document.getElementById('checkout').value;
+            let paymentSection = document.getElementById('paymentSection');
+            if (checkinDate && checkoutDate) {
+                paymentSection.style.display = 'block';
+            } else {
+                paymentSection.style.display = 'none';
             }
         }
 
-        // Show login form
-        function showLogin() {
-            var authSection = document.getElementById('authSection');
-            authSection.innerHTML = `
-                <h3>Login</h3>
-                <form onsubmit="login(event)">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" required>
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" required>
-                    <input type="submit" value="Login">
-                </form>`;
-        }
-
-        // Show registration form
-        function showRegister() {
-            var authSection = document.getElementById('authSection');
-            authSection.innerHTML = `
-                <h3>Register</h3>
-                <form onsubmit="register(event)">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" required>
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" required>
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" required>
-                    <input type="submit" value="Register">
-                </form>`;
-        }
-
-        // Register function
-        function register(event) {
+        // Function to handle login
+        function handleLogin(event) {
             event.preventDefault();
-            let name = document.getElementById('name').value;
-            let email = document.getElementById('email').value;
+            let username = document.getElementById('username').value;
             let password = document.getElementById('password').value;
-
-            if (users.find(user => user.email === email)) {
-                alert('Email already registered.');
-                return;
-            }
-
-            users.push({ name, email, password, isAdmin: false });
-            alert('Registration successful. Please login.');
-            loadPage('login');
-        }
-
-        // Login function
-        function login(event) {
-            event.preventDefault();
-            let email = document.getElementById('email').value;
-            let password = document.getElementById('password').value;
-
-            let user = users.find(user => user.email === email && user.password === password);
-
+            
+            // Simple authentication
+            let user = users.find(user => user.username === username && user.password === password);
             if (user) {
                 currentUser = user;
-                isAdmin = user.isAdmin;
-                document.getElementById('userLink').innerHTML = `<a href="#" onclick="loadPage('profile')">${user.name}</a>`;
+                isAdmin = user.isAdmin || false;
+                document.getElementById('userLink').classList.add('hidden');
                 document.getElementById('logout').classList.remove('hidden');
-                if (isAdmin) {
-                    document.getElementById('adminLink').classList.remove('hidden');
-                }
+                document.getElementById('adminLink').classList.toggle('hidden', !isAdmin);
                 loadPage('home');
             } else {
-                alert('Invalid credentials.');
+                alert('Invalid username or password');
             }
         }
 
-        // Logout function
+        // Function to handle registration
+        function handleRegister(event) {
+            event.preventDefault();
+            let username = document.getElementById('newUsername').value;
+            let password = document.getElementById('newPassword').value;
+
+            // Check if user already exists
+            if (users.some(user => user.username === username)) {
+                alert('Username already exists');
+            } else {
+                let newUser = { username, password, isAdmin: false };
+                users.push(newUser);
+                alert('Registration successful');
+                loadPage('login');
+            }
+        }
+
+        // Function to submit booking
+        function submitBooking(event) {
+            event.preventDefault();
+            let booking = {
+                id: bookings.length + 1,
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                checkin: document.getElementById('checkin').value,
+                checkout: document.getElementById('checkout').value,
+                roomType: document.getElementById('roomType').value,
+                payment: {
+                    cardNumber: document.getElementById('cardNumber').value,
+                    expiryDate: document.getElementById('expiryDate').value,
+                    cvv: document.getElementById('cvv').value
+                }
+            };
+            bookings.push(booking);
+            alert('Booking successful');
+            loadPage('history');
+        }
+
+        // Function to modify booking
+        function modifyBooking(id) {
+            let booking = bookings.find(b => b.id === id);
+            if (booking) {
+                let newRoomType = prompt('Enter new room type (single/double/suite):', booking.roomType);
+                if (newRoomType) {
+                    booking.roomType = newRoomType;
+                    alert('Booking modified successfully');
+                    loadPage('history');
+                }
+            } else {
+                alert('Booking not found');
+            }
+        }
+
+        // Function to cancel booking
+        function cancelBooking(id) {
+            bookings = bookings.filter(b => b.id !== id);
+            alert('Booking cancelled successfully');
+            loadPage('history');
+        }
+        function loadBookingHistory() {
+            const history = document.getElementById('bookingHistory');
+            history.innerHTML = bookings.map(b => `
+                <tr>
+                    <td>${b.id}</td>
+                    <td>${b.name}</td>
+                    <td>${b.roomType}</td>
+                    <td>${b.checkIn}</td>
+                    <td>${b.checkOut}</td>
+                    <td><button onclick="modifyBooking(${b.id})">Modify</button> <button onclick="cancelBooking(${b.id})">Cancel</button></td>
+                </tr>
+            `).join('');
+        }
+
+        // Function to handle logout
         function logout() {
             currentUser = null;
             isAdmin = false;
-            document.getElementById('userLink').innerHTML = `<a href="#" onclick="loadPage('login')">Login/Register</a>`;
+            document.getElementById('userLink').classList.remove('hidden');
             document.getElementById('logout').classList.add('hidden');
             document.getElementById('adminLink').classList.add('hidden');
             loadPage('home');
         }
 
-        // Book room function
-        function bookRoom(event) {
-            event.preventDefault();
-            let roomType = document.getElementById('roomType').value;
-            let checkin = new Date(document.getElementById('checkin').value);
-            let checkout = new Date(document.getElementById('checkout').value);
-
-            if (checkout <= checkin) {
-                alert('Check-out date must be after check-in date.');
-                return;
-            }
-
-            bookings.push({
-                userEmail: currentUser.email,
-                roomType,
-                checkin,
-                checkout,
-                bookingDate: new Date(),
-                bookingId: Date.now()
-            });
-
-            alert('Room booked successfully.');
-            loadPage('history');
-        }
-
-        // Show booking history
-        function showBookingHistory() {
-            var content = document.getElementById('content');
-            let userBookings = bookings.filter(b => b.userEmail === currentUser.email);
-
-            if (userBookings.length === 0) {
-                content.innerHTML = `<h2>Your Booking History</h2><p>No bookings found.</p>`;
-                return;
-            }
-
-            let bookingRows = userBookings.map(b => {
-                let canModify = (new Date(b.checkin) - new Date()) / (1000 * 60 * 60 * 24) > 3;
-                return `
-                    <tr>
-                        <td>${b.bookingId}</td>
-                        <td>${b.roomType}</td>
-                        <td>${b.checkin.toDateString()}</td>
-                        <td>${b.checkout.toDateString()}</td>
-                        <td>${canModify ? `<button onclick="modifyBooking(${b.bookingId})">Modify</button>` : ''}</td>
-                        <td>${canModify ? `<button onclick="cancelBooking(${b.bookingId})">Cancel</button>` : ''}</td>
-                    </tr>`;
-            }).join('');
-
-            content.innerHTML = `
-                <h2>Your Booking History</h2>
-                <table>
-                    <tr>
-                        <th>Booking ID</th>
-                        <th>Room Type</th>
-                        <th>Check-In</th>
-                        <th>Check-Out</th>
-                        <th>Modify</th>
-                        <th>Cancel</th>
-                    </tr>
-                    ${bookingRows}
-                </table>
-                <button onclick="loadPage('booking')">Make a New Booking</button>`;
-        }
-
-        // Modify booking
-        function modifyBooking(bookingId) {
-            let booking = bookings.find(b => b.bookingId === bookingId);
-            if (!booking) return;
-
-            var content = document.getElementById('content');
-            content.innerHTML = `
-                <h2>Modify Booking</h2>
-                <form onsubmit="updateBooking(event, ${bookingId})">
-                    <label for="roomType">Room Type:</label>
-                    <select id="roomType" required>
-                        <option value="Standard" ${booking.roomType === 'Standard' ? 'selected' : ''}>Standard</option>
-                        <option value="Deluxe" ${booking.roomType === 'Deluxe' ? 'selected' : ''}>Deluxe</option>
-                        <option value="Executive" ${booking.roomType === 'Executive Suite' ? 'selected' : ''}>Executive Suite</option>
-                        <option value="Presidential" ${booking.roomType === 'Presidential Suite' ? 'selected' : ''}>Presidential Suite</option>
-                    </select>
-                    <label for="checkin">Check-In Date:</label>
-                    <input type="date" id="checkin" value="${booking.checkin.toISOString().split('T')[0]}" required>
-                    <label for="checkout">Check-Out Date:</label>
-                    <input type="date" id="checkout" value="${booking.checkout.toISOString().split('T')[0]}" required>
-                    <input type="submit" value="Update Booking">
-                </form>`;
-        }
-
-        // Update booking
-        function updateBooking(event, bookingId) {
-            event.preventDefault();
-            let booking = bookings.find(b => b.bookingId === bookingId);
-            if (!booking) return;
-
-            let roomType = document.getElementById('roomType').value;
-            let checkin = new Date(document.getElementById('checkin').value);
-            let checkout = new Date(document.getElementById('checkout').value);
-
-            booking.roomType = roomType;
-            booking.checkin = checkin;
-            booking.checkout = checkout;
-
-            alert('Booking updated successfully.');
-            showBookingHistory();
-        }
-
-        // Cancel booking
-        function cancelBooking(bookingId) {
-            let index = bookings.findIndex(b => b.bookingId === bookingId);
-            if (index !== -1) {
-                bookings.splice(index, 1);
-                alert('Booking canceled successfully.');
-                showBookingHistory();
-            }
-        }
-
-        // Edit profile
-        function editProfile() {
-            var content = document.getElementById('content');
-            content.innerHTML = `
-                <h2>Edit Profile</h2>
-                <form onsubmit="updateProfile(event)">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" value="${currentUser.name}" required>
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" value="${currentUser.email}" required>
-                    <input type="submit" value="Update Profile">
-                </form>`;
-        }
-
-        // Update profile
-        function updateProfile(event) {
-            event.preventDefault();
-            let name = document.getElementById('name').value;
-            let email = document.getElementById('email').value;
-
-            currentUser.name = name;
-            currentUser.email = email;
-
-            alert('Profile updated successfully.');
-            loadPage('profile');
-        }
-
-        // Show Admin Panel
-        function showAdminPanel() {
-            var content = document.getElementById('content');
-
-            // Admin can manage rooms, bookings, and static pages
-            content.innerHTML = `
-                <h2>Admin Panel</h2>
-                <div class="admin-section">
-                    <h3>Manage Rooms</h3>
-                    <p>Change quantity and price of room types.</p>
-                    <!-- Room management form here -->
-                </div>
-                <div class="admin-section">
-                    <h3>Manage Bookings</h3>
-                    <p>Modify or cancel any specific booking.</p>
-                    <!-- Booking management table here -->
-                </div>
-                <div class="admin-section">
-                    <h3>Edit Static Pages</h3>
-                    <p>Modify details of static pages.</p>
-                    <!-- Static page editor here -->
-                </div>`;
-        }
-
-        // Initialize the page
+        // Initialize default page
         loadPage('home');
-
-        // Add an admin user for demonstration
-        users.push({ name: 'Admin', email: 'admin@hotel.com', password: 'admin', isAdmin: true });
     </script>
 </body>
 </html>
